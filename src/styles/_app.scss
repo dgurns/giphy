@@ -1,0 +1,50 @@
+.app {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  max-width: $max-content-width;
+  padding: $large-spacer 0;
+  text-align: center;
+  width: 100%;
+}
+
+.app__search {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  margin-bottom: $medium-spacer;
+  width: 100%;
+}
+
+.app__search input {
+  display: flex;
+  flex: 1;
+  margin-right: $small-spacer;
+}
+
+.app__results-container {
+  align-items: flex-start;
+  background-color: gray;
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  width: $max-content-width;
+}
+
+.app__result-item {
+  background-color: red;
+  height: 395px;
+  margin-bottom: $small-spacer;
+  width: 395px;
+  &:nth-child(odd) {
+    margin-right: $small-spacer;
+  }
+}
+
+@include tablet {
+  .app {
+    padding: $large-spacer $small-spacer;
+  }
+}
