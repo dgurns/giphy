@@ -76,6 +76,7 @@ class App extends Component {
               className="app__result-item"
               src={gif.images.fixed_height_downsampled.url}
               alt={gif.title}
+              key={gif.id}
               onClick={() => this.onGifClicked(gif)}
             />
           ))}
