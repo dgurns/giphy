@@ -9,7 +9,6 @@ class App extends Component {
     results: [],
     resultsPage: 1,
     error: '',
-    modalVisible: false,
     selectedGif: null
   };
 
@@ -41,19 +40,15 @@ class App extends Component {
   }
 
   onGifClicked = gif => {
-    this.setState({ selectedGif: gif, modalVisible: true });
+    this.setState({ selectedGif: gif });
   };
 
   renderModal() {
-    const { modalVisible, selectedGif } = this.state;
-    if (modalVisible && selectedGif) {
+    const { selectedGif } = this.state;
+    if (selectedGif) {
       const { images, title } = selectedGif;
       return (
-        <Modal
-          onClose={() =>
-            this.setState({ modalVisible: false, selectedGif: null })
-          }
-        >
+        <Modal onClose={() => this.setState({ selectedGif: null })}>
           <img className="modal__image" src={images.original.url} alt={title} />
         </Modal>
       );
