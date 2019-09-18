@@ -24,9 +24,11 @@ I created an `apiRequests` helper file to export modular functions which make AP
 
 Finally I added some basic unit tests for the `App` component, checking that it renders correctly, calls the API request with the given search term, shows the modal, and has pagination which works correctly. I created a mock for `apiRequests` which returns a resolved promise with sample data. These are very basic tests, and at a larger scale I would probably aim for 100% test coverage, as well as testing the other components and the `apiRequests` helper functions. But given the time constraints here I just wanted to show an example. I'm using React Testing Library which I have found to be a pleasure to use over Enzyme, and more representative of how a user would interact with an app in practice.
 
-## Available Scripts
+## Running on Your Machine
 
-In the project directory, you can run:
+Start by running a `yarn install` or `npm install` to install the dependencies.
+
+Once you have done that, while in the root project directory you can run:
 
 ### `yarn start` or `npm start`
 
