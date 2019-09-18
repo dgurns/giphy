@@ -25,26 +25,36 @@
 
 .app__results-container {
   align-items: flex-start;
-  background-color: gray;
   display: flex;
   flex: 1;
   flex-wrap: wrap;
   justify-content: flex-start;
+  margin-bottom: $medium-spacer;
   width: $max-content-width;
 }
 
-.app__result-item {
+img.app__result-item {
   background-color: red;
-  height: 395px;
-  margin-bottom: $small-spacer;
-  width: 395px;
-  &:nth-child(odd) {
-    margin-right: $small-spacer;
-  }
+  cursor: pointer;
+  display: inline-block;
+  height: 200px;
+  margin: 0 $small-spacer $small-spacer 0;
 }
 
 @include tablet {
   .app {
     padding: $large-spacer $small-spacer;
+  }
+
+  .app__results-container {
+    display: block;
+    width: 100%;
+  }
+}
+
+@include mobile {
+  img.app__result-item {
+    height: auto;
+    width: 100%;
   }
 }

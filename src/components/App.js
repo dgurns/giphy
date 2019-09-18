@@ -1,17 +1,37 @@
 import React, { Component } from 'react';
 import { searchGifs } from '../helpers/apiRequests';
+import Pagination from './Pagination';
+import Modal from './Modal';
 
 class App extends Component {
   state = {
     searchQuery: '',
     results: [],
     resultsPage: 1,
-    error: ''
+    error: '',
+    modalVisible: false,
+    selectedGif: null
   };
 
-  async onSearchClicked() {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.resultsPage !== this.state.resultsPage) {
+      this.fetchGifs();
+    }
+  }
+
+  onPaginationClicked = (increment = true) => {
+    const { resultsPage } = this.state;
+    const updatedResultsPage = increment ? resultsPage + 1 : resultsPage - 1;
+    this.setState({ resultsPage: updatedResultsPage });
+  };
+
+  onSearchClicked = () => {
+    this.setState({ resultsPage: 1 }, () => this.fetchGifs());
+  };
+
+  async fetchGifs() {
     const { searchQuery, resultsPage } = this.state;
-    this.setState({ error: '' });
+    this.setState({ error: '', results: [] });
     try {
       const results = await searchGifs(searchQuery, resultsPage);
       this.setState({ results });
@@ -20,8 +40,28 @@ class App extends Component {
     }
   }
 
+  onGifClicked = gif => {
+    this.setState({ selectedGif: gif, modalVisible: true });
+  };
+
+  renderModal() {
+    const { modalVisible, selectedGif } = this.state;
+    if (modalVisible && selectedGif) {
+      const { images, title } = selectedGif;
+      return (
+        <Modal
+          onClose={() =>
+            this.setState({ modalVisible: false, selectedGif: null })
+          }
+        >
+          <img className="modal__image" src={images.original.url} alt={title} />
+        </Modal>
+      );
+    }
+  }
+
   render() {
-    const { searchQuery } = this.state;
+    const { searchQuery, results, resultsPage, error } = this.state;
 
     return (
       <div className="app">
@@ -36,17 +76,24 @@ class App extends Component {
           <button onClick={this.onSearchClicked.bind(this)}>Search</button>
         </div>
         <div className="app__results-container">
-          <div className="app__result-item" />
-          <div className="app__result-item" />
-          <div className="app__result-item" />
-          <div className="app__result-item" />
-          <div className="app__result-item" />
-          <div className="app__result-item" />
-          <div className="app__result-item" />
-          <div className="app__result-item" />
-          <div className="app__result-item" />
-          <div className="app__result-item" />
+          {results.map(gif => (
+            <img
+              className="app__result-item"
+              src={gif.images.fixed_height_downsampled.url}
+              alt={gif.title}
+              onClick={() => this.onGifClicked(gif)}
+            />
+          ))}
+          {error}
         </div>
+        {results.length > 0 && (
+          <Pagination
+            currentPage={resultsPage}
+            onPageForward={() => this.onPaginationClicked()}
+            onPageBack={() => this.onPaginationClicked(false)}
+          />
+        )}
+        {this.renderModal()}
       </div>
     );
   }
