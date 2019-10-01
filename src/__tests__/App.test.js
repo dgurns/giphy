@@ -15,11 +15,12 @@ describe('<App /> component', () => {
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  it('should call searchGifs API request with given term when search is clicked', () => {
+  it('should call searchGifs API request with given term when search is clicked', async () => {
     const { getByText, getByPlaceholderText } = render(<App />);
     const searchField = getByPlaceholderText(/Enter search term/i);
+    const searchButton = getByText('Search');
     fireEvent.change(searchField, { target: { value: 'dog' } });
-    fireEvent.click(getByText('Search'));
+    await wait(() => fireEvent.click(searchButton));
     expect(searchGifs).toHaveBeenCalledTimes(1);
     expect(searchGifs).toHaveBeenNthCalledWith(1, 'dog', 1);
   });
@@ -29,9 +30,7 @@ describe('<App /> component', () => {
     const searchField = getByPlaceholderText(/Enter search term/i);
     fireEvent.change(searchField, { target: { value: 'dog' } });
     fireEvent.click(getByText('Search'));
-    await wait(() => {
-      fireEvent.click(getByAltText('First gif'));
-    });
+    await wait(() => fireEvent.click(getByAltText('First gif')));
     const modalCloseButton = getByText('Close');
     expect(modalCloseButton).toBeTruthy();
   });
@@ -40,15 +39,13 @@ describe('<App /> component', () => {
     const { getByText, getByPlaceholderText } = render(<App />);
     const searchField = getByPlaceholderText(/Enter search term/i);
     fireEvent.change(searchField, { target: { value: 'dog' } });
-    fireEvent.click(getByText('Search'));
+    await wait(() => fireEvent.click(getByText('Search')));
     expect(searchGifs).toHaveBeenCalledTimes(1);
     expect(searchGifs).toHaveBeenNthCalledWith(1, 'dog', 1);
-    await wait(() => {
-      fireEvent.click(getByText('>'));
-    });
+    await wait(() => fireEvent.click(getByText('>')));
     expect(searchGifs).toHaveBeenCalledTimes(2);
     expect(searchGifs).toHaveBeenNthCalledWith(2, 'dog', 2);
-    fireEvent.click(getByText('>'));
+    await wait(() => fireEvent.click(getByText('>')));
     expect(searchGifs).toHaveBeenCalledTimes(3);
     expect(searchGifs).toHaveBeenNthCalledWith(3, 'dog', 3);
   });
